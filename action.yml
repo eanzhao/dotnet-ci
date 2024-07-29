@@ -26,13 +26,6 @@ runs:
       with:
         dotnet-version: '8.0'
 
-    - name: Download AElf build tools
-      run: bash scripts/download_binary.sh
-
-    - name: Install Protobuf
-      run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
-      shell: bash
-
     - run: dotnet restore ${{ inputs.solution-name }}
       shell: bash
 
