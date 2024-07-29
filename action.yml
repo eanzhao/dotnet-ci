@@ -1,5 +1,7 @@
 name: Dotnet Build and Test
+
 description: 'Run tests, generate tests badges and upload coverage to Codecov'
+
 inputs:
   commit-token:
     description: 'GitHub token'
@@ -14,6 +16,9 @@ inputs:
     description: 'Solution file (*.sln) name'
     required: true
 
+permissions:
+  contents: write
+  actions: read
 
 runs:
   using: 'composite'
