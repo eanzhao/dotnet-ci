@@ -34,7 +34,7 @@ runs:
 
     - name: Run Unit Tests
       run: |
-        for testproj in $(find . -name '*Tests')
+        for testproj in $(find . -name '*.csproj' -path '*Tests*')
         do
           dotnet test --no-build --no-restore --verbosity normal -l:"trx;LogFileName=TestResults.xml" --collect:"XPlat Code Coverage" $testproj || true
         done
@@ -47,7 +47,7 @@ runs:
 
     - name: Create Code Coverage Report
       run: |
-        reportgenerator "-reports:**/coverage.cobertura.xml" "-targetdir:./coverage/reports" -reporttypes:"Cobertura"
+        reportgenerator "-reports:./**/coverage.cobertura.xml" "-targetdir:./coverage/reports" -reporttypes:"Cobertura"
         echo "COVERAGE_FILE=./coverage/reports/Cobertura.xml" >> $GITHUB_ENV
       shell: bash
 
