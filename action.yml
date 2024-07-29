@@ -31,9 +31,13 @@ runs:
 
     - name: Install Protobuf
       run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      shell: bash
 
     - run: dotnet restore ${{ inputs.solution-name }}
+      shell: bash
+
     - run: dotnet build --no-restore ${{ inputs.solution-name }}
+      shell: bash
 
     - name: Run Unit Tests
       run: |
@@ -42,14 +46,17 @@ runs:
           dotnet test --no-build --no-restore --verbosity normal -l:"trx;LogFileName=TestResults.xml" --collect:"XPlat Code Coverage" $testproj || true
         done
       continue-on-error: true
+      shell: bash
 
     - name: Install ReportGenerator tool
       run: dotnet tool install --global dotnet-reportgenerator-globaltool
+      shell: bash
 
     - name: Create Code Coverage Report
       run: |
         reportgenerator "-reports:**/coverage.cobertura.xml" "-targetdir:./coverage/reports" -reporttypes:"Cobertura"
         echo "COVERAGE_FILE=./coverage/reports/Cobertura.xml" >> $GITHUB_ENV
+      shell: bash
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v2
@@ -63,6 +70,7 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y xmlstarlet
+      shell: bash
 
     - name: Extract Test Counts
       id: test_counts
@@ -82,9 +90,11 @@ runs:
         echo "PASSED=$passed" >> $GITHUB_ENV
         echo "FAILED=$failed" >> $GITHUB_ENV
         echo "SKIPPED=$skipped" >> $GITHUB_ENV
+      shell: bash
 
     - name: Set file name
       run: echo "FILENAME=$(echo ${GITHUB_REF#refs/heads/} | tr '/' '-')-test-results.json" >> $GITHUB_ENV
+      shell: bash
 
     - name: Prepare Content
       uses: actions/github-script@v5
